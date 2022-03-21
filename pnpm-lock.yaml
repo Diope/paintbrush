@@ -9,12 +9,14 @@ specifiers:
   '@types/react': 17.0.41
   '@types/react-dom': 17.0.14
   '@types/react-redux': 7.1.23
+  '@types/redux-logger': 3.0.9
   react: ^17.0.2
   react-dom: ^17.0.2
   react-redux: 7.2.6
   react-scripts: 5.0.0
   redux: 4.1.2
   redux-devtools-extension: 2.13.9
+  redux-logger: 3.0.6
   typescript: 4.6.2
   web-vitals: 2.1.4
 
@@ -27,12 +29,14 @@ dependencies:
   '@types/react': 17.0.41
   '@types/react-dom': 17.0.14
   '@types/react-redux': 7.1.23
+  '@types/redux-logger': 3.0.9
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
   react-redux: 7.2.6_react-dom@17.0.2+react@17.0.2
   react-scripts: 5.0.0_react@17.0.2+typescript@4.6.2
   redux: 4.1.2
   redux-devtools-extension: 2.13.9_redux@4.1.2
+  redux-logger: 3.0.6
   typescript: 4.6.2
   web-vitals: 2.1.4
 
@@ -2275,6 +2279,12 @@ packages:
       csstype: 3.0.11
     dev: false
 
+  /@types/redux-logger/3.0.9:
+    resolution: {integrity: sha512-cwYhVbYNgH01aepeMwhd0ABX6fhVB2rcQ9m80u8Fl50ZODhsZ8RhQArnLTkE7/Zrfq4Sz/taNoF7DQy9pCZSKg==}
+    dependencies:
+      redux: 4.1.2
+    dev: false
+
   /@types/resolve/1.17.1:
     resolution: {integrity: sha512-yy7HuzQhj0dhGpD8RLXSZWEkLsV9ibvxvi6EiJ3bkqLAO1RGo0WbkWQiwpRlSFymTJRz0d3k5LM3kkx8ArDbLw==}
     dependencies:
@@ -3830,6 +3840,10 @@ packages:
 
   /dedent/0.7.0:
     resolution: {integrity: sha1-JJXduvbrh0q7Dhvp3yLS5aVEMmw=}
+    dev: false
+
+  /deep-diff/0.3.8:
+    resolution: {integrity: sha1-wB3mPvsO7JeYgB1Ax+Da4ltYLIQ=}
     dev: false
 
   /deep-equal/1.1.1:
@@ -7989,6 +8003,12 @@ packages:
       redux: ^3.1.0 || ^4.0.0
     dependencies:
       redux: 4.1.2
+    dev: false
+
+  /redux-logger/3.0.6:
+    resolution: {integrity: sha1-91VZZvMJjzyIYExEnPC69XeCdL8=}
+    dependencies:
+      deep-diff: 0.3.8
     dev: false
 
   /redux/4.1.2:
