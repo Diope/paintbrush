@@ -12,7 +12,8 @@ export const canvasSizeSet = (
   height: number,
   canvas: HTMLCanvasElement
 ) => {
-  canvas.getContext("2d")?.scale(2,2)
-  canvas.width = width * 2
-  canvas.height = height * 2
+
+  // Ah I can set the style height and width!
+  canvas.style.width = `${width}px`
+  canvas.style.height = `${height}px`
 };
