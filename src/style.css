@@ -33,7 +33,7 @@ html {
 }
 
 .container {
-  background-color: #EDECEC;
+  background-color: #edecec;
   height: 100vh;
 }
 
@@ -1178,4 +1178,11 @@ html {
 }
 .btn.paypal:before {
   content: '\f342';
+}
+
+/* CANVAS */
+
+canvas {
+  transform: translate3d(-50%, 0, 0);
+  margin: 100px 50%;
 }
