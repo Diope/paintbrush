@@ -18,6 +18,7 @@ function App() {
   useEffect(() => {
     const userHeight = WINDOWHEIGHT * .809
     const userWidth = WINDOWWIDTH * .743
+    console.log(userHeight, userWidth)
     const { ctx, canvas } = getCanvasCtx();
     if (!ctx || !canvas) {
       throw new Error('CANVAS GETCANVASCTX ERROR');
