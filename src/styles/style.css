@@ -1188,6 +1188,7 @@ canvas {
   transform: translate(15%,10%);
   border-radius: 4px;
   border: 1px solid #D9D9D9;
+  background-color: white;
   /* -webkit-box-shadow: 0 20px 70px rgba(0, 0, 0, 0.55);
     -moz-box-shadow: 0 20px 70px rgba(0, 0, 0, 0.55);
     box-shadow: 0 20px 70px rgba(0, 0, 0, 0.55); */

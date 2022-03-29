@@ -1,0 +1,12 @@
+FROM node:14.17-buster as build
+
+WORKDIR /app
+COPY package.json package.json
+RUN npm install --production
+COPY . .
+CMD npm run build
+
+FROM nginx:1.21-alpine as prod
+COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
