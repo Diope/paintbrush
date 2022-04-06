@@ -1,0 +1,165 @@
+version: 2.1
+
+jobs:
+  Build:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:16.4.2
+    steps:
+      - checkout
+      - run:
+          name: Show Branch
+          command: echo ${CURRENT_BRANCH}
+      - run:
+          name: update-npm
+          command: 'sudo npm install -g npm@latest'
+      - restore_cache:
+          key: app-{{ checksum "package.json" }}
+      - run:
+          name: Install PNPM
+          command: npm install -g pnpm@next-7
+      - run:
+          name: Install Dependencies
+          command: pnpm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+          
+  Deploy_to_AWS_S3:
+    docker:
+      - image: circleci/node:16.4.2-alpine
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: Show Current Branch
+          command: echo ${CURRENT_BRANCH}
+      - run:
+          name: Installing AWS CLI
+          working_directory: /
+          command: |
+          apk add --no-cache python
+          apk add --no-cache py3-pip
+          pip3 install --upgrade pip
+          pip3 install --no-cache-dir awscli
+          rm -rf /var/cache/apk/*
+      - run:
+          name: Building
+          command: |
+            pnpm install
+            pnpm run build
+            cd build
+            zip ../build.zip -r * .[^.]*
+            echo "Build successful"
+      - run:
+          name: Deploy to S3
+          command: |
+            if [ "${CURRENT_BRANCH}" == "main" ]
+            then
+              aws --region ${AWS_REGION} s3 sync ~/repo/build s3://${AWS_BUCKET_PROD} --delete
+            elif [ "${CURRENT_BRANCH}" == "develop"]
+            then
+              aws --region ${AWS_REGION} s3 sync ~/repo/build s3://${AWS_BUCKET_DEV} --delete
+            fi
+
+  Deploy_to_Cloudfront:
+    docker:
+      - image: circleci/node:16.4.2
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: Show Current Branch
+          command: echo ${CURRENT_BRANCH}
+      - run:
+          name: Installing AWS CLI
+          working_directory: /
+          command: |
+          apk add --no-cache python
+          apk add --no-cache py3-pip
+          pip3 install --upgrade pip
+          pip3 install --no-cache-dir awscli
+          rm -rf /var/cache/apk/*
+      - run:
+          name: Building
+          command: |
+            pnpm install
+            pnpm run build
+            cd build
+            zip ../build.zip -r * .[^.]*
+            echo "Build successful"
+      - run:
+          name: Deploy to cloudfront
+          command: |
+            aws configure set preview.cloudfront
+            if [ "${CURRENT_BRANCH}" == "main" ]
+            then
+              aws cloudfront create-invalidtion -distribution-id ${PROD_DISTRIBUTION_ID} --paths /\*
+            elif [ "${CURRENT_BRANCH}" == "develop"]
+            then
+              aws cloudfront create-invalidtion -distribution-id ${DEV_DISTRIBUTION_ID} --paths /\*
+            fi
+
+workflows:
+  build_and_deploy:
+    jobs:
+      - Build
+      - Deploy_to_AWS_S3:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - develop
+                - main
+      - Deploy_to_Cloudfront:
+          requires:
+            - Develop_to_AWS_S3
+          filters:
+            branches:
+              only:
+                - develop
+                - main
+  
+
+  # orbs:
+  #   docker: circleci/docker@0.5.13
+
+  # jobs:
+  #   run_tests:
+  #     working_directory: ./
+  #     docker:
+  #       - image: circleci/node:10.16.3
+  #     steps:
+  #       - checkout
+  #       - run:
+  #           name: update-npm
+  #           command: 'sudo npm install -g npm@latest'
+  #       - restore_cache:
+  #           key: dependency-cache-{{ checksum "package.json" }}
+  #       - run:
+  #           name: npm-install
+  #           command: npm install
+  #       - save_cache:
+  #           key: dependency-cache-{{ checksum "package.json" }}
+  #           paths:
+  #             - ./node_modules
+  #       - run:
+  #           name: test
+  #           command: npm test
+
+  # workflows:
+  version: 2
+  build_deploy:
+    jobs:
+      - run_tests
+      - docker/publish:
+          image: gumshoe/$CIRCLE_PROJECT_REPONAME
+          dockerfile: dockerfile
+          requires:
+            - run_tests
+          filters:
+            branches:
+              only:
+                - master

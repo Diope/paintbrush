@@ -11,6 +11,7 @@
 # production
 /build
 /nginx
+/app
 
 # misc
 .DS_Store
