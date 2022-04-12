@@ -49,9 +49,9 @@ jobs:
         with:
           context: ../../
           file: ./Dockerfile.prod
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          push: ${{github.ref == 'refs/heads/main'}}
 
       # - name: Image digest
       #   run: echo ${{ steps.docker_build.outputs.digest }}
