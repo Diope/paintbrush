@@ -1,5 +1,5 @@
 FROM node:16.4.2-alpine as build
-RUN curl -fsSL https://get.pnpm.io/install.sh | PNPM_VERSION=7.0.0-rc.3 sh -
+RUN npm install -g pnpm@next-7
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 RUN ls -l
