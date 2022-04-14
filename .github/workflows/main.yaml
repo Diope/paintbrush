@@ -45,6 +45,8 @@ jobs:
           password: ${{ secrets.GHCR_PAT }}
       - 
         name: Build image and push it to both registries
+        env:
+          CI: false
         uses: docker/build-push-action@v2
         with:
           file: ./Dockerfile.prod
