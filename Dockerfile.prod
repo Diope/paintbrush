@@ -6,7 +6,6 @@ RUN ls -l
 COPY /package.json ./
 RUN pnpm fetch --prod
 ADD . ./
-RUN pnpm install -r --offline --prod
 RUN pnpm build
 
 
