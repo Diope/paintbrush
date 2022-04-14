@@ -51,8 +51,8 @@ jobs:
           tags: |
             dipet/paintbrush:latest
             dipet/paintbrush:1.0.0
-            ghcr.io/user/app:latest
-            ghcr.io/user/app:1.0.0
+            ghcr.io/diope/paintbrush:latest
+            ghcr.io/diope/paintbrush:1.0.0
 
       # - name: Image digest
       #   run: echo ${{ steps.docker_build.outputs.digest }}
